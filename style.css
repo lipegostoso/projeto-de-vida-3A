@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="pt-br" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tabs Futuristas 2026 • Glass + Neon</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+
+  <style>
+    :root {
+      --bg: #0a0e1a;
+      --bg-card: rgba(15, 23, 42, 0.68);
+      --border: rgba(99, 102, 241, 0.22);
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --accent: #6366f1;
+      --accent-dark: #4f46e5;
+      --glow: rgba(99, 102, 241, 0.6);
+      --gradient: linear-gradient(135deg, #6366f1 0%, #a78bfa 50%, #ec4899 100%);
+    }
+
+    [data-theme="light"] {
+      --bg: #f8fafc;
+      --bg-card: rgba(255, 255, 255, 0.78);
+      --border: rgba(203, 213, 225, 0.4);
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --accent: #4f46e5;
+      --accent-dark: #4338ca;
+      --glow: rgba(79, 70, 229, 0.5);
+      --gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #c084fc 100%);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 2.5rem 1rem;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(99,102,241,0.12) 0%, transparent 30%),
+        radial-gradient(circle at 90% 80%, rgba(167,139,250,0.09) 0%, transparent 40%);
+      transition: background 0.6s ease;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    h1 {
+      font-size: 3.2rem;
+      font-weight: 800;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: -1px;
+      margin-bottom: 0.6rem;
+    }
+
+    .subtitle {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .theme-toggle {
+      position: fixed;
+      top: 1.5rem;
+      right: 1.5rem;
+      z-index: 100;
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      font-size: 1.4rem;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+
+    .theme-toggle:hover {
+      transform: scale(1.15) rotate(15deg);
+      box-shadow: 0 0 30px var(--glow);
+    }
+
+    /* Tabs Container */
+    .tabs {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 0.75rem;
+      justify-content: center;
+      margin-bottom: 3rem;
+      padding: 0.8rem;
+      background: var(--bg-card);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 1.5rem;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.28);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tab {
+      position: relative;
+      padding: 1rem 2rem;
+      background: transparent;
+      border: none;
+      border-radius: 1rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 1.05rem;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      z-index: 2;
+    }
+
+    .tab svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+      transition: transform 0.4s;
+    }
+
+    .tab:hover {
+      color: var(--text);
+      transform: translateY(-4px);
+    }
+
+    .tab:hover svg {
+      transform: scale(1.2);
+    }
+
+    .tab.active {
+      color: white;
+      background: var(--gradient);
+      box-shadow: 0 0 35px var(--glow);
+      transform: translateY(-6px);
+    }
+
+    /* Indicador (underline) fluido - corrigido com pseudo-elemento no .tabs */
+    .tabs::after {
+      content: '';
+      position: absolute;
+      bottom: 0.6rem;
+      height: 3px;
+      background: var(--gradient);
+      border-radius: 3px;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 1;
+      opacity: 0;
+    }
+
+    /* Vamos controlar via JS o width e left do ::after */
+    .tab-content {
+      background: var(--bg-card);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--border);
+      border-radius: 1.8rem;
+      padding: 3rem;
+      box-shadow: 0 16px 60px rgba(0,0,0,0.35);
+      min-height: 380px;
+      transition: transform 0.5s ease, box-shadow 0.5s ease;
+    }
+
+    .tab-content:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 24px 80px rgba(0,0,0,0.4);
+    }
+
+    .tab-pane {
+      display: none;
+      animation: fadeUp 0.6s ease forwards;
+    }
+
+    .tab-pane.active {
+      display: block;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 1.4rem;
+    }
+
+    p {
+      line-height: 1.8;
+      color: var(--text-muted);
+      font-size: 1.1rem;
+    }
+
+    /* Responsividade */
+    @media (max-width: 768px) {
+      .tabs {
+        gap: 0.6rem;
+        padding: 0.6rem;
+        overflow-x: auto;
+        justify-content: flex-start;
+        scroll-snap-type: x mandatory;
+      }
+
+      .tab {
+        padding: 0.9rem 1.6rem;
+        font-size: 1rem;
+        flex-shrink: 0;
+      }
+
+      .tab-content {
+        padding: 2rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 { font-size: 2.4rem; }
+      .tab-content { padding: 1.6rem; }
+    }
+
+    /* Acessibilidade */
+    .tab:focus-visible,
+    .theme-toggle:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 4px var(--glow);
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Alternar tema">🌙</button>
+
+  <header>
+    <h1>Tabs Futuristas</h1>
+    <p class="subtitle">Glassmorphism avançado + Neon Liquid Glow • Micro-animações • Vibe 2026</p>
+  </header>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="1">
+      <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+      Início
+    </button>
+    <button class="tab" data-tab="2">
+      <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      Explorar
+    </button>
+    <button class="tab" data-tab="3">
+      <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM7 10h2v7H7zm4-3h2v10h-2zm4 6h2v4h-2z"/></svg>
+      Projetos
+    </button>
+    <button class="tab" data-tab="4">
+      <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-
