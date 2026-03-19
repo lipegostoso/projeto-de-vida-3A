@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Felipe Buzolla • Futuro Programador</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@500;700&display=swap" rel="stylesheet"/>
+  
+  <style>
+    :root {
+      --bg: #0a0e17;
+      --bg-dark: #060912;
+      --primary: #3b82f6;
+      --primary-dark: #2563eb;
+      --accent: #60a5fa;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --glass: rgba(30, 58, 138, 0.18);
+      --glass-border: rgba(191, 219, 254, 0.12);
+      --shadow: 0 8px 32px rgba(0,0,0,0.5);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 15% 50%, rgba(59,130,246,0.08) 0%, transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(96,165,250,0.06) 0%, transparent 35%);
+      position: relative;
+    }
+
+    /* Partículas de fundo leves */
+    #particles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -2;
+    }
+
+    canvas {
+      display: block;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+      padding: 1.5rem 5%;
+      background: rgba(10,14,23,0.6);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--glass-border);
+      transition: all 0.4s ease;
+    }
+
+    header.scrolled {
+      padding: 1rem 5%;
+      background: rgba(10,14,23,0.85);
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .logo {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-shadow: 0 0 20px rgba(96,165,250,0.4);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -6px;
+      left: 0;
+      background: var(--primary);
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: white;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    main {
+      padding-top: 140px;
+    }
+
+    section {
+      padding: 8rem 5%;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: clamp(3.5rem, 8vw, 7rem);
+      font-weight: 800;
+      line-height: 0.95;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(90deg, #60a5fa, #3b82f6, #93c5fd);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 10px 30px rgba(59,130,246,0.3);
+    }
+
+    .typing {
+      font-size: 1.6rem;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 2.5rem;
+      min-height: 2rem;
+    }
+
+    .glass-card {
+      background: var(--glass);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      padding: 3rem;
+      box-shadow: var(--shadow);
+      transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+      transform: translateY(20px);
+      opacity: 0;
+    }
+
+    .glass-card.visible {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .glass-card:hover {
+      transform: translateY(-12px) scale(1.02);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+    }
+
+    .idade {
+      font-size: 2rem;
+      color: var(--accent);
+      margin: 1.5rem 0;
+    }
+
+    .objetivos {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.8rem;
+      margin-top: 3rem;
+    }
+
+    .obj-item {
+      background: rgba(30,58,138,0.12);
+      border: 1px solid rgba(191,219,254,0.08);
+      border-radius: 16px;
+      padding: 2rem;
+      transition: all 0.4s ease;
+    }
+
+    .obj-item:hover {
+      background: rgba(59,130,246,0.15);
+      transform: translateY(-8px);
+    }
+
+    .obj-item i {
+      font-size: 2.2rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+
+    .highlight {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .cta {
+      display: inline-block;
+      margin-top: 2.5rem;
+      padding: 1rem 2.5rem;
+      background: linear-gradient(45deg, var(--primary), var(--accent));
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 1.2rem;
+      box-shadow: 0 10px 30px rgba(59,130,246,0.4);
+      transition: all 0.4s ease;
+    }
+
+    .cta:hover {
+      transform: translateY(-4px) scale(1.05);
+      box-shadow: 0 20px 50px rgba(59,130,246,0.6);
+    }
+
+    footer {
+      text-align: center;
+      padding: 4rem 2rem 2rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--glass-border);
+    }
+
+    @media (max-width: 768px) {
+      nav { flex-direction: column; gap: 1.5rem; }
+      .nav-links { flex-direction: column; align-items: center; gap: 1.2rem; }
+      section { padding: 6rem 5%; }
+      h1 { font-size: clamp(3rem, 12vw, 5.5rem); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Partículas de fundo -->
+  <div id="particles"></div>
+
+  <header id="header">
+    <nav>
+      <div class="logo">FelipeB</div>
+      <div class="nav-links">
+        <a href="#sobre">Sobre</a>
+        <a href="#objetivos">Objetivos</a>
+        <a href="#futuro">Futuro</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section id="hero">
+      <h1>Felipe Buzolla</h1>
+      <div class="typing" id="typing-text"></div>
+      
+      <div class="glass-card visible" id="sobre">
+        <h2 style="font-size: 2.8rem; margin-bottom: 1.5rem; color: var(--accent);">
+          Quero ser <span class="highlight">Programador</span>
+        </h2>
+        <p class="idade">Tenho <strong>18 anos</strong> e estou começando minha jornada na tecnologia com muita energia!</p>
+        <p style="font-size: 1.25rem; line-height: 1.8; max-width: 800px; margin: 2rem 0;">
+          Apaixonado por código, lógica e criar coisas que impactam a vida das pessoas. 
+          Meu sonho é transformar ideias em realidade através de linhas de código.
+        </p>
+        <a href="#objetivos" class="cta">Ver meus objetivos →</a>
+      </div>
+    </section>
+
+    <section id="objetivos">
+      <h2 style="text-align: center; font-size: 3.2rem; margin-bottom: 4rem; color: var(--accent);">
+        Meus Objetivos Principais
+      </h2>
+      
+      <div class="objetivos">
+        <div class="obj-item glass-card">
+          <i class="fas fa-graduation-cap"></i>
+          <h3>Terminar o <span class="highlight">Colégio</span></h3>
+          <p>Com notas altas e foco total para abrir portas na área de tecnologia.</p>
+        </div>
+        
+        <div class="obj-item glass-card">
+          <i class="fas fa-university"></i>
+          <h3>Entrar em uma faculdade / curso técnico de <span class="highlight">Tecnologia</span></h3>
+          <p>Desenvolvimento de Software, Ciência da Computação ou Análise e Desenvolvimento de Sistemas.</p>
+        </div>
+        
+        <div class="obj-item glass-card">
+          <i class="fas fa-code"></i>
+          <h3>Me formar e conquistar meu primeiro emprego como <span class="highlight">Programador</span></h3>
+          <p>Começar como júnior e crescer rápido na carreira.</p>
+        </div>
+        
+        <div class="obj-item glass-card">
+          <i class="fas fa-book-open"></i>
+          <h3>Aprender sem parar</h3>
+          <p>HTML • CSS • JavaScript • React • Node.js • Python • Git • Banco de dados...</p>
+        </div>
+        
+        <div class="obj-item glass-card">
+          <i class="fas fa-rocket"></i>
+          <h3>Construir projetos reais</h3>
+          <p>Apps, sites, ferramentas que resolvam problemas de verdade e mostrem meu potencial.</p>
+        </div>
+        
+        <div class="obj-item glass-card">
+          <i class="fas fa-laptop-code"></i>
+          <h3>Trabalhar remotamente ou em grandes empresas</h3>
+          <p>Ter liberdade geográfica ou fazer parte de times incríveis de tech.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="futuro" style="text-align: center;">
+      <div class="glass-card" style="max-width: 900px; margin: 0 auto;">
+        <h2 style="font-size: 3.5rem; margin-bottom: 2rem;">Vamos juntos nessa jornada! 🚀</h2>
+        <p style="font-size: 1.5rem; line-height: 1.7; margin-bottom: 3rem;">
+          "O maior risco é não arriscar nada. <br>
+          Comecei hoje. Em alguns anos, vou olhar para trás e me orgulhar."
+        </p>
+        <a href="https://github.com" target="_blank" class="cta">
+          <i class="fab fa-github"></i> Meu GitHub (em breve com projetos!)
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2026 Felipe Buzolla • Construindo o futuro, uma linha de código por vez 💙</p>
+  </footer>
+
+  <!-- JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script>
+    // Partículas de fundo
+    particlesJS("particles", {
+      "particles": {
+        "number": { "value": 60, "density": { "enable": true, "value_area": 800 } },
+        "color": { "value": "#60a5fa" },
+        "shape": { "type": "circle" },
+        "opacity": { "value": 0.3, "random": true },
+        "size": { "value": 3, "random": true },
+        "line_linked": { "enable": true, "distance": 150, "color": "#3b82f6", "opacity": 0.2, "width": 1 },
+        "move": { "enable": true, "speed": 1.5, "direction": "none", "random": true, "straight": false, "out_mode": "out" }
+      },
+      "interactivity": {
+        "detect_on": "canvas",
+        "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
+        "modes": { "grab": { "distance": 140, "line_linked": { "opacity": 0.5 } }, "push": { "particles_nb": 4 } }
+      },
+      "retina_detect": true
+    });
+
+    // Typing effect
+    const texts = [
+      "Quero ser Programador",
+      "18 anos e muita vontade de aprender",
+      "HTML • CSS • JS • Python • ...",
+      "Meu futuro começa agora"
+    ];
+    let textIndex = 0;
+    let charIndex = 0;
+    const typingElement = document.getElementById('typing-text');
+
+    function type() {
+      if (charIndex < texts[textIndex].length) {
+        typingElement.textContent += texts[textIndex].charAt(charIndex);
+        charIndex++;
+        setTimeout(type, 80);
+      } else {
+        setTimeout(erase, 2000);
+      }
+    }
+
+    function erase() {
+      if (charIndex > 0) {
+        typingElement.textContent = texts[textIndex].substring(0, charIndex - 1);
+        charIndex--;
+        setTimeout(erase, 40);
+      } else {
+        textIndex = (textIndex + 1) % texts.length;
+        setTimeout(type, 500);
+      }
+    }
+
+    type();
+
+    // Header scroll effect
+    window.addEventListener('scroll', () => {
+      document.getElementById('header').classList.toggle('scrolled', window.scrollY > 100);
+    });
+
+    // Animate cards on scroll
+    const cards = document.querySelectorAll('.glass-card');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    cards.forEach(card => observer.observe(card));
+  </script>
+</body>
+</html>
